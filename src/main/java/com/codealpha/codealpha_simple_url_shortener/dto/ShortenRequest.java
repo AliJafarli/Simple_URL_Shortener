@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ShortenRequest {
-
     @NotBlank(message = "URL must not be empty")
     @Size(max = 2048, message = "URL is too long")
     private String url;

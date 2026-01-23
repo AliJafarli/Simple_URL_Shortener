@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        input {
+            width: 420px;
+            padding: 8px;
+        }
+        button {
+            padding: 8px 14px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Simple URL Shortener</h2>
+
+<input id="urlInput" type="text" placeholder="Enter long URL">
+<button onclick="shortenUrl()">Shorten</button>
+
+<div class="result" id="result"></div>
+
+<script>
+    async function shortenUrl() {
+        const url = document.getElementById("urlInput").value;
+        const resultDiv = document.getElementById("result");
+
+        resultDiv.innerHTML = "";
+
+        if (!url) {
+            resultDiv.innerHTML =
+                "<span class='error'>Please enter a URL</span>";
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/shorten", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ url: url })
+            });
+
+            if (!response.ok) {
+                let errorMessage = "Error";
+
+                try {
+                    const errorData = await response.json();
+                    errorMessage = Object.values(errorData).join(", ");
+                } catch (e) {
+                    errorMessage = await response.text();
+                }
+
+                resultDiv.innerHTML =
+                    "<span class='error'>" + errorMessage + "</span>";
+                return;
+            }
+
+            const data = await response.json();
+
+            resultDiv.innerHTML = `
+                <p><strong>Short URL:</strong></p>
+                <a href="${data.shortUrl}" target="_blank">
+                    ${data.shortUrl}
+                </a>
+            `;
+        } catch (e) {
+            resultDiv.innerHTML =
+                "<span class='error'>Cannot connect to server</span>";
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -32,17 +32,6 @@ public class UrlController {
         );
     }
 
-//    @GetMapping("/{code}")
-//    public ResponseEntity<Void> redirect(@PathVariable String code) {
-//        UrlMapping mapping = service.findByCode(code);
-//        if (mapping == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.status(302)
-//                .location(URI.create(mapping.getOriginalUrl()))
-//                .build();
-//    }
-
     @GetMapping("/{code:[a-zA-Z0-9]{7}}")
     public ResponseEntity<Void> redirect(@PathVariable String code) {
         UrlMapping mapping = service.findByCode(code);

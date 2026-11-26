@@ -1,4 +1,4 @@
-   # Simple URL Shortener
+# Simple URL Shortener
 
 A simple URL Shortener application built with **Java** and **Spring Boot** as part of the **CodeAlpha Internship**.
 
